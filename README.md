@@ -22,7 +22,7 @@ lm = dspy.LM('ollama_chat/deepseek-r1', api_base='http://localhost:11434', api_k
 
 Run the math solver:
 ```bash
-python math_solver.py
+python math_solver_diy.py
 ```
 
 ## Features
@@ -30,11 +30,16 @@ python math_solver.py
 - Solves math problems with a provided calculator
 - Displays step-by-step reasoning for each problem. 
 - Records only the final answer for accuracy calculation
-- Normalize answers by removing LaTeX formatting for accurate comparison between expected and predicted
+- **Answer checking (configurable in `math_solver_diy.py`):** deterministic LaTeX/string normalization, or a small **LLM judge** that compares reference vs candidate answer only (ignores formatting). With `OVERLAP_JUDGE`, judging can overlap the next solve (same Ollama host may still serialize requests).
 - Tracks correct/incorrect answers
 - Displays accuracy percentage
 
 ## Configuration
 
-The application is configured to use a local Ollama server at `http://localhost:11434` with the `deepseek-r1` model. You can modify the configuration in `math_solver.py` if needed.
+Edit the constants at the top of [`math_solver_diy.py`](math_solver_diy.py):
 
+- **`ANSWER_CHECK_MODE`:** `"normalize"` (default) or `"llm"`.
+- **`OLLAMA_API_BASE`**, **`SOLVER_MODEL`**, **`JUDGE_MODEL`:** solver and optional judge (used when mode is `"llm"`).
+- **`OVERLAP_JUDGE`:** when `True` and mode is `"llm"`, submit equivalence checks in a background thread so the next problem can start solving while the previous answer is judged.
+
+The application defaults to a local Ollama server at `http://localhost:11434`.
