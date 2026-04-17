@@ -1,4 +1,4 @@
-# DSPy Math Problem Solver
+# DSPy Math Solver & Benchmarker
 
 A DSPy application that solves math problems, displays reasoning, and tracks accuracy. This is a beginner project to experiment with DSPy and errors are expected.
 
